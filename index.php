@@ -13,8 +13,8 @@
                     <img src="<?php echo $result['image']?>" class="card-img-top" alt="...">
                     <div class="card-body">
                     <h5 class="card-title"><?php echo $result['name']?></h5>
-                    <p class="card-text"><?php echo $result['price']?></p>
-                    <a href="#" class="btn btn-primary">Add to Cart</a>
+                    <p class="card-text">Ksh <?php echo $result['price']?></p>
+                    <a href="display.php?id=<?php echo $result['id']?>" class="btn btn-primary">View Product</a>
                     </div>
                 </div>
              </div>
