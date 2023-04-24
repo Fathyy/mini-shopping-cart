@@ -2,6 +2,7 @@
 <div class="container">
     <div class="row" >
 <?php
+// display all products from the database
     require_once __DIR__ . '/config/database.php';
     $statement = $dbh->prepare("SELECT * FROM product_details");
     $statement->execute();
@@ -14,7 +15,7 @@
                     <div class="card-body">
                     <h5 class="card-title"><?php echo $result['name']?></h5>
                     <p class="card-text">Ksh <?php echo $result['price']?></p>
-                    <a href="display.php?id=<?php echo $result['id']?>" class="btn btn-primary">View Product</a>
+                    <a href="product.php?id=<?php echo $result['id']?>" class="btn btn-primary">View Product</a>
                     </div>
                 </div>
              </div>
