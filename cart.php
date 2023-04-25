@@ -81,6 +81,7 @@ if ($products_in_cart) {
 ?>
 
 <?php require_once __DIR__ . '/includes/header.php';?>
+<?php require_once __DIR__ . '/includes/navbar.php';?>
 <form action="cart.php" method="post">
     <table class="table">
         <thead>
