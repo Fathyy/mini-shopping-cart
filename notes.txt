@@ -197,4 +197,3 @@ if (isset($_POST['add_to_cart'])) {
 }
 
 
-echo "<script>window.location ='index.php'</script>";
