@@ -9,7 +9,7 @@ require_once __DIR__ . '/header.php'; ?>
         <div class="collapse navbar-collapse justify-content-center" id="navbarSupportedContent">
             <ul class="navbar-nav mb-2 mb-lg-0">
                 <li class="nav-item">
-                    <a class="nav-link active" href="#">Home</a>
+                    <a class="nav-link active" href="index.php">Home</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="#">Link</a>
@@ -21,11 +21,14 @@ require_once __DIR__ . '/header.php'; ?>
             <a class="nav-link" href="cart.php">
                 <i class="fa-solid fa-cart-shopping fa-lg" style="color: #de731b; position:relative;">
                     <span class="badge" style="color:white; position:absolute; left:15px; bottom:0.5px; background-color:black;
-                    border-radius:50%;" >
+                    border-radius:50%; font-size:10px; text-align:center;" >
                 <?php
                 if (isset($_SESSION['cart'])) {
                     $count = count($_SESSION['cart']);
                     echo $count;
+                }
+                else {
+                    echo "0";
                 }
                 ?>
                 </span>
