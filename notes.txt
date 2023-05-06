@@ -41,3 +41,17 @@
         ?>
     </div>
 </div>
+
+    
+
+<label>COD
+    <input type="radio" name="payment" value="COD"/>
+    </label>
+    <label>Paypal
+    <input type="radio" name="payment" value="paypal" />
+    </label>
+    <label>Mpesa
+    <input type="radio" name="payment" value="mpesa" />
+    </label>
+
+

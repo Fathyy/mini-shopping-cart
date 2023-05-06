@@ -67,7 +67,7 @@ if (isset($_POST['add_to_cart'])) {
                     <td>".$value['name']."</td>
                     <td>".$value['price']."</td>
                     <td>".$value['quantity']."</td>
-                    <td>".number_format($value['price'] * $value['quantity'],2)."</td>
+                    <td>".number_format($value['price'] * $value['quantity'], 2)."</td>
                     <td>
                     <a href='cart.php?action=remove&id=".$value['id']."'>
                     <button class='btn btn-danger btn-block'>Remove</button>
@@ -77,6 +77,7 @@ if (isset($_POST['add_to_cart'])) {
                 ";
 
                 $total = $total + $value['quantity'] * $value['price']; 
+    
             }
 
             $output .= "
@@ -87,6 +88,14 @@ if (isset($_POST['add_to_cart'])) {
             <td>
                 <a href='cart.php?action=clearall'>
                 <button class='btn btn-warning btn-block'>Clear</button>
+                </a>
+            </td>
+            </tr>
+            <tr>
+            <td colspan='5'></td>
+            <td>
+                <a href='checkout.php'>
+                <button class='btn btn-success btn-block'>Checkout</button>
                 </a>
             </td>
             </tr>
@@ -115,6 +124,4 @@ if (isset($_GET['action'])) {
     }
 }
 ?>
-
-
 <?php require_once __DIR__ . '/includes/footer.php';?>
