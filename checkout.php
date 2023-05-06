@@ -60,20 +60,19 @@ session_start();
         <div class="col-md-3 border p-4 ms-5">
             <h4 class="text-center">Your Cart</h4>
             <?php
+            $total = 0;
             if (isset($_SESSION['cart']) && !empty($_SESSION['cart'])) :
                 foreach ($_SESSION['cart'] as $key => $value) :?>
                 <div class="cart d-flex justify-content-evenly">
                     <div><b><?php echo $value['name']?>:</b></div>
                     <div>Ksh <?php echo $value['price']?></div>
-                </div>   
+                    <div>x <?php echo $value['quantity']?></div>
+                </div> 
+                <?php $total += $value['quantity'] * $value['price']; ?> 
                 <?php endforeach ?>
-                <p>
-                <?php
-                    if (isset($total)) {
-                        echo $total;
-                    }?>
-               </p>
             <?php endif?>
+                <h5>Total Price:<span class="float-end"><?php echo $total?></span></h5>
+                <!-- total goes here -->
         </div>
     </div>
  </div>
