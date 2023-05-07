@@ -7,7 +7,7 @@ session_start();
     <div class="row mt-3">
         <!-- Billing details -->
         <div class="col-md-7 billing-section" >
-            <form action="" method="post">
+            <form action="placeorder.php" method="post">
                 <div class="row">
                     <h4>Billing Details</h4>
                     <div class="col-md-6 mb-3">
@@ -34,12 +34,13 @@ session_start();
                 </div>
 
                 <div class="mb-3">
-                    <label for="address">Address</label>
+                    <label for="address">Address
                     <textarea name="address" id="address"></textarea>
+                    </label>
                 </div>
 
                 <div class="mb-3">Mode of payment
-                <label for="COD" style="display: block;">
+                <label for=" COD" style="display: block;">
                     <input type="radio" name="payment" id="COD" value="COD"/>
                     Cash on Delivery
                 </label>
@@ -54,7 +55,11 @@ session_start();
                     Mpesa
                 </label>
             </div>
-            </form>
+
+            <div>
+              <input type="submit" value="Place order" name="place_order" class="btn btn-primary">
+            </div>
+            </form> 
         </div>
         <!-- Cart details on the side -->
         <div class="col-md-3 border p-4 ms-5">
@@ -71,10 +76,14 @@ session_start();
                 <?php $total += $value['quantity'] * $value['price']; ?> 
                 <?php endforeach ?>
             <?php endif?>
-                <h5>Total Price:<span class="float-end"><?php echo $total?></span></h5>
-                <!-- total goes here -->
+                <h5>Total Price:<span class="float-end"><?php echo $total?></span></h5>     
         </div>
     </div>
  </div>
  <?php
  require_once __DIR__ . '/includes/footer.php'; ?>
+ 
+ 
+ 
+ 
+ 

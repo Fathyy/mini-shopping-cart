@@ -4,7 +4,7 @@
     <div class="row" >
 <?php
 // display all products from the database
-    require_once __DIR__ . '/config/database.php';
+    
     $statement = $dbh->prepare("SELECT * FROM product_details");
     $statement->execute();
     $results = $statement->fetchAll(PDO::FETCH_ASSOC);
