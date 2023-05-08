@@ -1,6 +1,7 @@
 <?php 
 // session_start();
-require_once __DIR__ . '/header.php'; ?>
+require_once __DIR__ . '/header.php';
+ ?>
 <nav class="navbar navbar-expand-lg bg-body-tertiary">
     <div class="container">
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -19,9 +20,8 @@ require_once __DIR__ . '/header.php'; ?>
         </div>
         <div class="nav-item ms-auto">
             <a class="nav-link" href="cart.php">
-                <i class="fa-solid fa-cart-shopping fa-lg" style="color: #de731b; position:relative;">
-                    <span class="badge" style="color:white; position:absolute; left:15px; bottom:0.5px; background-color:black;
-                    border-radius:50%; font-size:10px; text-align:center;" >
+                <i class="fa-solid fa-cart-shopping fa-lg cart-icon">
+                    <span class="badge">
                 <?php
                 if (isset($_SESSION['cart'])) {
                     $count = count($_SESSION['cart']);

@@ -1,7 +1,6 @@
 <?php
-require_once __DIR__ . '/config/database.php';
-
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    require_once __DIR__ . '/config/database.php';
     $fname = trim($_POST['fname']); 
     $lname = trim($_POST['lname']); 
     $phone = trim($_POST['phone']);
