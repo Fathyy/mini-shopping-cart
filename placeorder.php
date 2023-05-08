@@ -8,7 +8,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $address = trim($_POST['address']);
     $payment = $_POST['payment'];
     
-    $stmt = $dbh->prepare("INSERT INTO orders(first name, last name, phone, email, address, mode of payment)
+    $stmt = $dbh->prepare("INSERT INTO orders(firstName, lastName, phone, email, address, modeOfPayment)
     VALUES(?, ?, ?, ?, ?, ?)"); 
     $stmt->bindParam(1, $fname, PDO::PARAM_STR); 
     $stmt->bindParam(2, $lname, PDO::PARAM_STR); 
