@@ -7,6 +7,7 @@ require_once __DIR__ . '/includes/header.php'
     <div class="container">
         <div class="row justify-content-center">
             <div class="col-md-6">
+                <!-- Bootstrap Alert -->
             <?php
                  if (isset($_SESSION['message'])) :?>
                      <div class="alert alert-warning alert-dismissible fade show" role="alert">
@@ -15,9 +16,6 @@ require_once __DIR__ . '/includes/header.php'
                     </div>
                     <?php unset($_SESSION['message'])?>
                  <?php endif ?>
-                
-                <!-- Bootstrap Alert -->
-                
                 
                 <!-- Bootstrap Alert -->
 

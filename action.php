@@ -1,6 +1,7 @@
 <?php
 session_start();
 // process the signup form
+require __DIR__ . '/config/database.php';
 if (isset($_POST['signup-btn'])) {
     $fname = $_POST['fname'];
     $lname = $_POST['lname'];
@@ -9,18 +10,20 @@ if (isset($_POST['signup-btn'])) {
     $password = $_POST['password'];
     $cpassword = $_POST['cpassword'];
 
+    // if inputs is empty, display error
     if (!$fname || !$lname || !$email || !$phone || !$password || !$cpassword) {
         $_SESSION['message'] = "This field cannot be empty";  
     }
 
+    // else validate the inputs
     else {
         // validate the email
-        if (! filter_var($_POST['email'], FILTER_VALIDATE_EMAIL)) {
+        if (!filter_var($_POST['email'], FILTER_VALIDATE_EMAIL)) {
             $_SESSION['message'] = "Invalid email format";
         }
 
         // check if the password contains 8 characters and has letters and numbers.
-        if (! preg_match('/^(?=.*\d)(?=.*[A-Za-z])[0-9A-Za-z]{8,}$/',$_POST["password"])) {
+        if (!preg_match('/^(?=.*\d)(?=.*[A-Za-z])[0-9A-Za-z]{8,}$/',$_POST["password"])) {
             $_SESSION['message'] =  "Password must contain numbers and letters and must be at least 8 characters long!";
         }
         if ($password !== $cpassword) {
@@ -29,8 +32,7 @@ if (isset($_POST['signup-btn'])) {
         
     }
 
-    // insert into db if there is no error
-    require __DIR__ . '/config/database.php';
+    // insert into db if $_SESSION['message'] is empty or there is no error
     if (empty($_SESSION['message'])) {
         $password_hash = password_hash($password, PASSWORD_DEFAULT);
         $statement = $dbh->prepare("INSERT INTO users (fname, lname, email, password, phone)
@@ -40,18 +42,44 @@ if (isset($_POST['signup-btn'])) {
         $statement->bindValue(':email', $email, PDO::PARAM_STR);
         $statement->bindValue(':password', $password_hash, PDO::PARAM_STR);
         $statement->bindValue(':phone', $phone, PDO::PARAM_STR);
-        $user = $statement->execute();  
+        $statement->execute();
+        $user = $statement->fetch(PDO::FETCH_ASSOC);
+        // redirect to login page after successful registration
+        if ($user) {
+            $_SESSION['success'] = "Successful registration. You may now log in";
+            header("Location: login.php");
+            exit;
+        }
     }
-    // otherwise redirect to the register.php and show the errors there
-    else {
-        header("Location: register.php");
-        exit;
-    }
+    // // otherwise, redirect to the register.php and show the errors there
+    // else {
+    //     header("Location: register.php");
+    //     exit;
+    // }
 }
 
 // process the login form here
 elseif (isset($_POST['login-btn'])) {
     $email = $_POST['email'];
     $password = $_POST['password']; 
+
+    // check if the user exists in the DB
+    $stmt = $dbh->prepare("SELECT * FROM users WHERE email = '$email'");
+    $stmt->execute();
+    $loggedUser = $stmt->fetch(PDO::FETCH_ASSOC);
+    // if user exists, redirect to index.php
+    if ($loggedUser) {
+        // $_SESSION['user_id'] = $loggedUser['user_id'];
+        $_SESSION['auth'] = true;
+        $username = $loggedUser['fname'];
+        $useremail =$loggedUser['email'];
+        $_SESSION['auth_user'] = [
+            'name'=>$username,
+            'email'=>$useremail
+        ];
+        header("Location: index.php");
+        exit;
+    }
+
 }
 ?> 

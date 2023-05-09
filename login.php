@@ -1,10 +1,23 @@
-<?php require_once __DIR__ . '/includes/header.php' 
+<?php 
+session_start();
+require_once __DIR__ . '/includes/header.php' 
  ?>
 
 <div class="py-5">
     <div class="container">
         <div class="row justify-content-center">
             <div class="col-md-6">
+                <!-- Bootstrap Alert -->
+            <?php
+                 if (isset($_SESSION['success'])) :?>
+                     <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                     <?php echo $_SESSION['success']?>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                    <?php unset($_SESSION['success'])?>
+                 <?php endif ?>
+                
+                <!-- Bootstrap Alert -->
                 <div class="card">
                     <div class="card-header">
                         <h4 class="heading">Login Form</h4>
@@ -27,10 +40,9 @@
                             </div>
 
                             <div>
-                                <input type="submit" class="btn btn-primary" value = "Login">
+                                <input type="submit" class="btn btn-primary" value ="Login" name="login-btn">
                                 <p>Don't have an account? Signup<a href="register.php">here</a></p>
                             </div>
-
                         </form>
                     </div>
                 </div>

@@ -1,5 +1,7 @@
 <?php
- require_once __DIR__ . '/includes/header.php'; ?>
+ require_once __DIR__ . '/includes/header.php';
+?>
+<?php require_once __DIR__ . '/includes/navbar.php';?>
 <div class="container">
     <div class="row" >
 <?php
@@ -17,7 +19,6 @@
                     <div class="card-body">
                     <h5 class="card-title"><?php echo $result['name']?></h5>
                     <p class="card-text">Ksh <?php echo $result['price']?></p>
-                    <!-- Have the quantity field fetched from the DB and then display it here -->
                     <input type="hidden" name="name" value="<?php echo $result['name']?>">
                     <input type="hidden" name="price" value="<?php echo $result['price']?>">
                     <input type="number" name="quantity" value="1" class="form-control">
