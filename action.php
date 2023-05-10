@@ -43,13 +43,13 @@ if (isset($_POST['signup-btn'])) {
         $statement->bindValue(':password', $password_hash, PDO::PARAM_STR);
         $statement->bindValue(':phone', $phone, PDO::PARAM_STR);
         $statement->execute();
-        $user = $statement->fetch(PDO::FETCH_ASSOC);
         // redirect to login page after successful registration
-        if ($user) {
-            $_SESSION['success'] = "Successful registration. You may now log in";
-            header("Location: login.php");
-            exit;
-        }
+        $lastInsertId=$dbh->lastInsertId();
+            if ($lastInsertId){
+                $_SESSION['success'] = "Successful registration. You may now log in";
+                header('Location: login.php');
+                exit;
+            }
     }
     // // otherwise, redirect to the register.php and show the errors there
     // else {
@@ -72,10 +72,10 @@ elseif (isset($_POST['login-btn'])) {
         // $_SESSION['user_id'] = $loggedUser['user_id'];
         $_SESSION['auth'] = true;
         $username = $loggedUser['fname'];
-        $useremail =$loggedUser['email'];
+        $userid =$loggedUser['user_id'];
         $_SESSION['auth_user'] = [
             'name'=>$username,
-            'email'=>$useremail
+            'id'=>$userid
         ];
         header("Location: index.php");
         exit;

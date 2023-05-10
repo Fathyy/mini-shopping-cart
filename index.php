@@ -7,22 +7,27 @@
 <?php
 // display all products from the database
     require_once __DIR__ . '/config/database.php';
-    $statement = $dbh->prepare("SELECT * FROM product_details");
+    $statement = $dbh->prepare("SELECT * FROM products");
     $statement->execute();
     $results = $statement->fetchAll(PDO::FETCH_ASSOC);
     if ($results):?>
     <?php foreach ($results as $result) :?>   
         <div class="col-md-4 my-3">
-            <form action="cart.php?id=<?php echo $result['id']?>" method="post">
+            <form action="cart.php?pid=<?php echo $result['product_id']?>" method="post">
                 <div class="card" style="width: 18rem;">
                     <img src="<?php echo $result['image']?>" class="card-img-top" alt="...">
                     <div class="card-body">
                     <h5 class="card-title"><?php echo $result['name']?></h5>
                     <p class="card-text">Ksh <?php echo $result['price']?></p>
-                    <input type="hidden" name="name" value="<?php echo $result['name']?>">
-                    <input type="hidden" name="price" value="<?php echo $result['price']?>">
+                    
+                    <!-- send the user_id as a hidden input field -->
+                    <input type="hidden" name="userid" value="<?php echo $_SESSION['auth_user']['id']?>">
                     <input type="number" name="quantity" value="1" class="form-control">
-                    <input type="submit" value="Add to Cart" name ="add_to_cart" class="btn btn-warning mt-3">
+                    <!-- Allow only logged in users to add to cart -->
+                    <?php
+                    if (isset($_SESSION['auth_user'])) :?>
+                            <input type="submit" value="Add to Cart" name ="add_to_cart" class="btn btn-warning mt-3">
+                    <?php endif?>
                     </div>
                 </div>
              </form>

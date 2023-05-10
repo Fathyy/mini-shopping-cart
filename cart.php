@@ -1,127 +1,55 @@
 <?php
-session_start();
-if (isset($_POST['add_to_cart'])) {
+require __DIR__ . '/config/database.php';
 
-    if (isset($_SESSION['cart'])) {
-        $session_array_id = array_column($_SESSION['cart'], 'id');
-        // check if the product is already in the cart
-        if (in_array($_GET['id'], $session_array_id)) {
-            echo "<script>alert('Product is already in the cart!')</script>";
-            echo "<script>window.location ='index.php'</script>"; 
-        }
-        else {
-            // if the product is not in the cart, add in the session variable
-            $count = count($_SESSION['cart']);
-            $session_array = array(
-                'id' => $_GET['id'], 
-                'name'=>$_POST['name'],
-                'price'=>$_POST['price'],
-                'quantity'=>$_POST['quantity']
-                
-            );
-            $_SESSION['cart'][$count]=$session_array;
-        }
+if (isset($_POST['add_to_cart'])) {
+    // insert the product_id, users_id and quantity into the carts table
+    $productid = $_GET['pid'];
+    $userid = $_POST['userid'];
+    $quantity = $_POST['quantity'];
+    $statement = $dbh->prepare("INSERT INTO cart (user_id, product_id, quantity)
+    VALUES(:user_id, :product_id, :quantity)");
+    $statement->bindValue(':user_id', $userid, PDO::PARAM_STR);
+    $statement->bindValue(':product_id', $productid, PDO::PARAM_STR);
+    $statement->bindValue(':quantity', $quantity, PDO::PARAM_STR);
+    $statement->execute();
+    $lastInsertId=$dbh->lastInsertId();
+    if ($lastInsertId) {
+        echo "Record inserted successfully";
+    } else {
+        echo "Record not inserted";
     }
-    else{
-        // if the shopping cart is empty
-        $session_array = array(
-            'id' => $_GET['id'],
-            'name'=>$_POST['name'],
-            'price'=>$_POST['price'],
-            'quantity'=>$_POST['quantity']
-        );
-        // create a new session variable
-        $_SESSION['cart'][] = $session_array;
-    } 
 }
 ?>
 
 <?php require_once __DIR__ . '/includes/header.php';?>
 <?php require_once __DIR__ . '/includes/navbar.php';?>
-<div class="container">
-    <div class="row">
-        <div class="heading">
-            <h3>Shopping cart items</h3>
-        </div>
+
+<table class='table table-bordered'>
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>User</th>
+            <th>Product name</th>
+            <th>Quantity</th>
+        </tr>
+    </thead>
+    <tbody>
+        <!-- select all items from the carts table for the
+    logged in user -->
         <?php
-        $total = 0;
-
-        $output = '';
-
-        $output .= "
-        <table class='table table-bordered'>
-                <tr>
-                    <th>ID</th>
-                    <th>Name</th>
-                    <th>Unit Price</th>
-                    <th>Quantity</th>
-                    <th>Total Price</th>
-                    <th>Action</th>
-                </tr>
-        ";
-        if (!empty($_SESSION['cart'])) {
-            foreach ($_SESSION['cart'] as $key => $value) {
-                $output .="
-                <tr>
-                    <td>".$value['id']."</td>
-                    <td>".$value['name']."</td>
-                    <td>".$value['price']."</td>
-                    <td>".$value['quantity']."</td>
-                    <td>".number_format($value['price'] * $value['quantity'], 2)."</td>
-                    <td>
-                    <a href='cart.php?action=remove&id=".$value['id']."'>
-                    <button class='btn btn-danger btn-block'>Remove</button>
-                    </a>
-                    </td>
-                </tr>
-                ";
-
-                $total = $total + $value['quantity'] * $value['price']; 
-    
-            }
-
-            $output .= "
-            <tr>
-            <td colspan='3'></td>
-            <td>Total Price</td>
-            <td>".number_format($total, 2)."</td>
-            <td>
-                <a href='cart.php?action=clearall'>
-                <button class='btn btn-warning btn-block'>Clear</button>
-                </a>
-            </td>
-            </tr>
-            <tr>
-            <td colspan='5'></td>
-            <td>
-                <a href='checkout.php'>
-                <button class='btn btn-success btn-block'>Checkout</button>
-                </a>
-            </td>
-            </tr>
-            </table>
-            ";
-        }
-
-        echo "$output";
-
-        ?>
-    </div>
-</div>
-
-<?php
-if (isset($_GET['action'])) {
-    if ($_GET['action'] === 'clearall') {
-        unset($_SESSION['cart']);
-    }
-
-    if ($_GET['action'] === 'remove') {
-        foreach ($_SESSION['cart'] as $key => $value) {
-            if ($value['id'] == $_GET['id']) {
-                unset($_SESSION['cart'][$key]);
-            }
-        }
-    }
-}
-?>
+        $user_id = $_SESSION['auth_user']['id'];
+        $statement = $dbh->prepare("SELECT * FROM cart c, products p, users u WHERE c.user_id=u.user_id
+         AND c.product_id=p.product_id AND c.user_id ='$user_id'");
+        $statement->execute();
+        while ($row = $statement->fetch(PDO::FETCH_ASSOC)) :?>
+           <tr>
+            <td><?php echo $row['id']?></td>
+            <td><?php echo $row['fname']?></td>
+            <td><?php echo $row['name']?></td>
+            <td><?php echo $row['quantity']?></td>
+           </tr> 
+        <?php endwhile ?>
+        
+    </tbody>
 <?php require_once __DIR__ . '/includes/footer.php';?>
+
