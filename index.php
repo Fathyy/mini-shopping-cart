@@ -21,7 +21,11 @@
                     <p class="card-text">Ksh <?php echo $result['price']?></p>
                     
                     <!-- send the user_id as a hidden input field -->
-                    <input type="hidden" name="userid" value="<?php echo $_SESSION['auth_user']['id']?>">
+                    <input type="hidden" name="userid" value="<?php 
+                    if (isset($_SESSION['auth_user'])) {
+                        echo $_SESSION['auth_user']['id'];
+                    }
+                    ?>">
                     <input type="number" name="quantity" value="1" class="form-control">
                     <!-- Allow only logged in users to add to cart -->
                     <?php

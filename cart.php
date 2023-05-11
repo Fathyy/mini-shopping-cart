@@ -6,18 +6,32 @@ if (isset($_POST['add_to_cart'])) {
     $productid = $_GET['pid'];
     $userid = $_POST['userid'];
     $quantity = $_POST['quantity'];
-    $statement = $dbh->prepare("INSERT INTO cart (user_id, product_id, quantity)
-    VALUES(:user_id, :product_id, :quantity)");
-    $statement->bindValue(':user_id', $userid, PDO::PARAM_STR);
-    $statement->bindValue(':product_id', $productid, PDO::PARAM_STR);
-    $statement->bindValue(':quantity', $quantity, PDO::PARAM_STR);
-    $statement->execute();
-    $lastInsertId=$dbh->lastInsertId();
-    if ($lastInsertId) {
-        echo "Record inserted successfully";
-    } else {
-        echo "Record not inserted";
+
+    // before inserting into cart, check if the product exists
+    $query = $dbh->prepare("SELECT * FROM cart WHERE product_id='$productid' and user_id='$userid'");
+
+    $query->execute();
+    $existingRecord = $query->fetch(PDO::FETCH_ASSOC);
+    if ($existingRecord) {
+        echo "Product already exists in the cart";
     }
+
+    else {
+    // if product doesn't exist in the cart, add to cart
+        $statement = $dbh->prepare("INSERT INTO cart (user_id, product_id, quantity)
+        VALUES(:user_id, :product_id, :quantity)");
+        $statement->bindValue(':user_id', $userid, PDO::PARAM_STR);
+        $statement->bindValue(':product_id', $productid, PDO::PARAM_STR);
+        $statement->bindValue(':quantity', $quantity, PDO::PARAM_STR);
+        $statement->execute();
+        $lastInsertId=$dbh->lastInsertId();
+        if ($lastInsertId) {
+            echo "Record inserted successfully";
+        } else {
+            echo "Record not inserted";
+        }
+    }
+
 }
 ?>
 
@@ -34,8 +48,8 @@ if (isset($_POST['add_to_cart'])) {
         </tr>
     </thead>
     <tbody>
-        <!-- select all items from the carts table for the
-    logged in user -->
+        <!-- display all items from the carts table for the
+        logged in user -->
         <?php
         $user_id = $_SESSION['auth_user']['id'];
         $statement = $dbh->prepare("SELECT * FROM cart c, products p, users u WHERE c.user_id=u.user_id

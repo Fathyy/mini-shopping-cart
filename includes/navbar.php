@@ -19,7 +19,7 @@ require_once __DIR__ . '/header.php';
                     <a class="nav-link" href="logout.php">logout</a>
                 </li>
             </ul>
-            <!-- shopping cart icon -->
+            <!-- shopping cart icon with number-->
             <div class="nav-item ms-auto">
             <a class="nav-link" href="cart.php">
                 <i class="fa-solid fa-cart-shopping fa-lg cart-icon">
