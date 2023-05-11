@@ -119,3 +119,26 @@ if (isset($_GET['action'])) {
 
 <input type="hidden" name="name" value="<?php echo $result['name']?>">
 <input type="hidden" name="price" value="<?php echo $result['price']?>">
+
+SELECT * FROM cart c, products p, users u WHERE c.user_id=u.user_id
+AND c.product_id=p.product_id AND c.user_id ='$user_id'
+
+
+<div class="row justify-content center">
+                    <!-- products image -->
+                    <div class="col-md-2">
+                        <img src="<?php echo $row['image']?>" width="80px" alt="">
+                    </div>
+                    <!-- product name -->
+                    <div class="col-md-4">
+                        <h5><?php echo $row['name']?></h5>
+                    </div>
+                    <!-- product price -->
+                    <div class="col-md-3">
+                        <h5><?php echo $row['price']?></h5>
+                    </div>
+                    <!-- cart quantity -->
+                    <div class="col-md-3">
+                        <h5><?php echo $row['quantity']?></h5>
+                    </div>
+                </div>
