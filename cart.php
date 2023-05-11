@@ -37,33 +37,40 @@ if (isset($_POST['add_to_cart'])) {
 
 <?php require_once __DIR__ . '/includes/header.php';?>
 <?php require_once __DIR__ . '/includes/navbar.php';?>
+<div class="container">
+    <div class="row">
+        <div class="col-md-12">
+            <!-- display all items from the carts table for the
+            logged in user -->
+            <?php
+            $user_id = $_SESSION['auth_user']['id'];
+            $statement = $dbh->prepare("SELECT * FROM cart c, products p, users u WHERE c.user_id=u.user_id
+            AND c.product_id=p.product_id AND c.user_id ='$user_id'");
+            $statement->execute();
+            while ($row = $statement->fetch(PDO::FETCH_ASSOC)) :?>
+            <div class="row">
+                <!-- products image -->
+                <div class="col-md-2">
+                    <img src="<?php echo $row['image']?>" alt="">
+                </div>
+                <!-- product name -->
+                <div class="col-md-4">
+                    <h5><?php echo $row['name']?></h5>
+                </div>
+                <!-- product price -->
+                <div class="col-md-3">
+                    <h5><?php echo $row['price']?></h5>
+                </div>
+                <!-- cart quantity -->
+                <div class="col-md-3">
+                    <!-- <h5><?php echo $row['quantity']?></h5> -->
+                </div>
+            </div>
+     
+            <?php endwhile ?>
+        </div>
+    </div>
+</div>
 
-<table class='table table-bordered'>
-    <thead>
-        <tr>
-            <th>ID</th>
-            <th>User</th>
-            <th>Product name</th>
-            <th>Quantity</th>
-        </tr>
-    </thead>
-    <tbody>
-        <!-- display all items from the carts table for the
-        logged in user -->
-        <?php
-        $user_id = $_SESSION['auth_user']['id'];
-        $statement = $dbh->prepare("SELECT * FROM cart c, products p, users u WHERE c.user_id=u.user_id
-         AND c.product_id=p.product_id AND c.user_id ='$user_id'");
-        $statement->execute();
-        while ($row = $statement->fetch(PDO::FETCH_ASSOC)) :?>
-           <tr>
-            <td><?php echo $row['id']?></td>
-            <td><?php echo $row['fname']?></td>
-            <td><?php echo $row['name']?></td>
-            <td><?php echo $row['quantity']?></td>
-           </tr> 
-        <?php endwhile ?>
-        
-    </tbody>
 <?php require_once __DIR__ . '/includes/footer.php';?>
 

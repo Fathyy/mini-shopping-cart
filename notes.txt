@@ -45,15 +45,7 @@ if (isset($_SESSION['cart'])) {
         $output = '';
 
         $output .= "
-        <table class='table table-bordered'>
-                <tr>
-                    <th>ID</th>
-                    <th>Name</th>
-                    <th>Unit Price</th>
-                    <th>Quantity</th>
-                    <th>Total Price</th>
-                    <th>Action</th>
-                </tr>
+        
         ";
         if (!empty($_SESSION['cart'])) {
             foreach ($_SESSION['cart'] as $key => $value) {
