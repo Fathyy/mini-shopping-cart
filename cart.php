@@ -92,7 +92,7 @@ if (isset($_POST['add_to_cart'])) {
                                 </div>
                                 <!-- remove button -->
                                 <div class="col-md-3">
-                                    <button type="button" class="btn btn-danger">Remove</button>
+                                    <button type="button" class="btn btn-danger?pid=<?php echo $row['product_id'] ?>">Remove</button>
                                 </div>
                             </div>
                         </div>
@@ -102,6 +102,14 @@ if (isset($_POST['add_to_cart'])) {
         </div>
     </div>
 </div>
+<?php
+// remove individual cart item
+if ($_GET['pid']) {
+    $pid = $_GET['pid'];
+    $statement = $dbh->prepare("DELETE FROM cart WHERE id = '$pid'");
+    $statement->execute();
+}
+?>
 
 <?php require_once __DIR__ . '/includes/footer.php';?>
 
