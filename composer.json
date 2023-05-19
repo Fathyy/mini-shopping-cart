@@ -1,7 +1,8 @@
 {
     "require": {
         "league/omnipay": "^3.2",
-        "omnipay/paypal": "^3.0"
+        "omnipay/paypal": "^3.0",
+        "vlucas/phpdotenv": "^5.5"
     },
     "config": {
         "allow-plugins": {

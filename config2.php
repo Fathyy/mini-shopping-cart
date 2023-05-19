@@ -3,8 +3,19 @@ require_once "vendor/autoload.php";
 
 use Omnipay\Omnipay;
 
-define('CLIENT_ID', 'AdWRvrPYLgTwf_2c76Gv0x2PuKoo54b-9nlCP2d2qLTvwi607sVAc1lTRcchHc-rU8y_XvR8etYD8feL');
-define('CLIENT_SECRET', 'ENua4dBboBTQksE5t0wFjIWZZec_7fRIN29wpFkoeV-PCmNI9cYS9AYy2za3Cavf1WDh9qTLak9BeQJi');
+// define('CLIENT_ID', '');
+// define('CLIENT_SECRET', '');
+
+// $client_id = env('PAYPAL_CLIENT_ID');
+// $client_secret=env('PAYPAL_SECRET');
+
+// loading dotenv in the application
+$dotenv = Dotenv\Dotenv::createImmutable(__DIR__);
+$dotenv->load();
+
+// define the client id variable using the $_ENV superglobal variable
+$client_id = $_ENV['PAYPAL_CLIENT_ID'];
+$client_secret = $_ENV['PAYPAL_SECRET'];
 
 define('PAYPAL_RETURN_URL', 'http://localhost/Shopping%20cart%20project/success.php');
 define('PAYPAL_CANCEL_URL', 'http://localhost/Shopping%20cart%20project/cancel.php');
@@ -15,6 +26,6 @@ require __DIR__ . '/config/database.php';
 
 // create and initialiaze the gateway
 $gateway = Omnipay::create('PayPal_Rest');
-$gateway->setClientId(CLIENT_ID);
-$gateway->setSecret(CLIENT_SECRET);
+$gateway->setClientId($client_id);
+$gateway->setSecret($client_secret);
 $gateway->setTestMode(true); //for sandbox

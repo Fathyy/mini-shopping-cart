@@ -31,7 +31,7 @@ if (array_key_exists('paymentId', $_GET) && array_key_exists('PayerID', $_GET)) 
 
         $lastInsertId=$dbh->lastInsertId();
             if ($lastInsertId){
-                echo "Payment is successful, Your transaction ID is " .$payment_id;
+                echo "Payment is successful, Your transaction ID is " . $payment_id;
             }
 
     }
