@@ -3,13 +3,7 @@ require_once "vendor/autoload.php";
 
 use Omnipay\Omnipay;
 
-// define('CLIENT_ID', '');
-// define('CLIENT_SECRET', '');
-
-// $client_id = env('PAYPAL_CLIENT_ID');
-// $client_secret=env('PAYPAL_SECRET');
-
-// loading dotenv in the application
+// loading dotenv in the application to load the environment variables in .env
 $dotenv = Dotenv\Dotenv::createImmutable(__DIR__);
 $dotenv->load();
 
