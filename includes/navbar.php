@@ -26,19 +26,7 @@ require_once __DIR__ . '/header.php';
             <!-- shopping cart icon with number-->
             <div class="nav-item ms-auto">
             <a class="nav-link" href="cart.php">
-                <i class="fa-solid fa-cart-shopping fa-lg cart-icon">
-                    <span class="badge">
-                <?php
-                if (isset($_SESSION['cart'])) {
-                    $count = count($_SESSION['cart']);
-                    echo $count;
-                }
-                else {
-                    echo "0";
-                }
-                ?>
-                </span>
-                </i>
+                <i class="fa-solid fa-cart-shopping fa-lg cart-icon"></i>
             </a>
         </div>
         <!-- shopping cart icon -->

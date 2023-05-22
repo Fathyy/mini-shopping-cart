@@ -3,17 +3,6 @@
      color: #de731b; 
      position:relative;
 } 
-
-.badge{
-     color:white;
-     position:absolute; 
-     left:15px; 
-     bottom:0.5px; 
-     background-color:black;             
-     border-radius:50%; 
-     font-size:10px; 
-     text-align:center; 
-} 
 /* register */
 .heading{
      text-align: center;

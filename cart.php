@@ -1,6 +1,14 @@
 <?php
 require __DIR__ . '/config/database.php';
 
+require __DIR__ . '/flash.php';
+
+// you can't access this page if you are not logged in
+if (!isset($_SESSION['auth_user'])) {
+    header("Location: login.php");
+    exit;
+}
+
 if (isset($_POST['add_to_cart'])) {
     // insert the product_id, users_id and quantity into the carts table
     $productid = $_GET['pid'];
@@ -12,7 +20,9 @@ if (isset($_POST['add_to_cart'])) {
     $query->execute();
     $existingRecord = $query->fetch(PDO::FETCH_ASSOC);
     if ($existingRecord) {
-        echo "Product already exists in the cart";
+        // show a flash message to show product is already in the cart
+        flash('InTheCart', 'Product is already in the cart', FLASH_WARNING);
+        flash('InTheCart');
     }
 
     else {
@@ -25,9 +35,11 @@ if (isset($_POST['add_to_cart'])) {
         $statement->execute();
         $lastInsertId=$dbh->lastInsertId();
         if ($lastInsertId) {
-            echo "Record inserted successfully";
+            flash('recordInserted', 'Record inserted successfully', FLASH_SUCCESS);
+            flash('recordInserted');
         } else {
-            echo "Record not inserted";
+            flash('recordNotInserted', 'Record not inserted', FLASH_ERROR);
+            flash('recordNotInserted');
         }
     }
 
@@ -70,13 +82,15 @@ if (isset($_POST['add_to_cart'])) {
                 
                 <?php
                 $user_id = $_SESSION['auth_user']['id'];
-                $statement = $dbh->prepare("SELECT p.product_id, p.name, p.image, p.price, c.quantity FROM cart c, 
+                $statement = $dbh->prepare("SELECT p.name, p.image, p.price, c.id, c.quantity FROM cart c, 
                 products p WHERE c.product_id=p.product_id AND c.user_id ='$user_id'");
                 $statement->execute();
-                while ($row = $statement->fetch(PDO::FETCH_ASSOC)) :?>
-                <?php $total = 0;
-                $grand_total = 0;
-                ?>
+                while($row = $statement->fetch(PDO::FETCH_ASSOC)):
+                if ($row) :
+                    $total = 0;
+                    $grand_total = 0;
+                    ?>
+
                     <div class="card shadow mb-3">
                         <div class="row align-items-center">
                             <!-- products image -->
@@ -97,7 +111,8 @@ if (isset($_POST['add_to_cart'])) {
                             </div>
                             <!-- remove button -->
                             <div class="col-md-2">
-                                <a href="cart.php?action=remove&id=<?php echo $row['product_id']?>" class="btn btn-danger"> Remove
+                                <a href="cart.php?action=remove&id=<?php echo $row['id']?>">
+                                    <button class="btn btn-danger">Remove</button>
                                 </a>
                             </div>
 
@@ -106,25 +121,28 @@ if (isset($_POST['add_to_cart'])) {
                                     <?php 
                                         $total = $row['price'] * $row['quantity'];
                                         echo $total;
+                                        $grand_total += $total;
                                     ?>
                                 </h5>
-                            </div>  
+                            </div> 
+                            
+                            <!-- process the remove button -->
+                            <?php 
+                            if (isset($_GET['action'])) {
+                                if ($_GET['action'] == 'remove') {
+                                    $id = $_GET['id'];
+                                    $statement = $dbh->prepare("DELETE FROM cart WHERE id = '$id'");
+                                    $statement->execute();
+                                }
+                            }
+                            ?>
                         </div>
-                    </div>  
-                    <!-- calculating the grand total -->
-                    <?php $grand_total += $total;?>
-
-                    <!-- process the remove button -->
-                    <?php 
-                    if (isset($_GET['action'])  == 'remove') {
-                        $id = $row['product_id'];
-                        if ($_GET['id'] == $row['product_id']) {
-                            $statement = $dbh->prepare("DELETE FROM cart WHERE id = '$id'");
-                            $statement->execute();
-                        }  
-                    }
-
-                    ?>
+                    </div>
+                
+                <?php else : 
+                    echo "There are no items in the cart";
+                ?> 
+                <?php endif ?>
                 <?php endwhile ?>
             </div>
 
@@ -132,7 +150,11 @@ if (isset($_POST['add_to_cart'])) {
             <div>
                 <h5 class="float-end">
                     <b>Grand Total:</b>
-                    <?php echo number_format($grand_total, 2)?></h5>
+                    <?php 
+                    if (isset($grand_total)) {
+                        echo number_format($grand_total, 2);
+                    }
+                    ?></h5>
                 </div>
                 <!-- total -->
                 

@@ -67,10 +67,7 @@ elseif (isset($_POST['login-btn'])) {
     $stmt = $dbh->prepare("SELECT * FROM users WHERE email = '$email'");
     $stmt->execute();
     $loggedUser = $stmt->fetch(PDO::FETCH_ASSOC);
-    // if user exists, redirect to index.php
     if ($loggedUser) {
-        // $_SESSION['user_id'] = $loggedUser['user_id'];
-        $_SESSION['auth'] = true;
         $username = $loggedUser['fname'];
         $userid =$loggedUser['user_id'];
         $_SESSION['auth_user'] = [
