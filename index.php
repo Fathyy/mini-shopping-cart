@@ -1,13 +1,14 @@
 <?php
-session_start();
+
+require_once __DIR__ . '/includes/navbar.php';
 // you can't access this page if you are not logged in
 if (!isset($_SESSION['auth_user'])) {
     header("Location: login.php");
     exit;
 }
- require_once __DIR__ . '/includes/header.php';
+ 
 ?>
-<?php require_once __DIR__ . '/includes/navbar.php';?>
+<?php require_once __DIR__ . '/includes/header.php';?>
 <div class="container">
     <div class="row" >
         <?php

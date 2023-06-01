@@ -6,7 +6,7 @@ require_once __DIR__ . '/includes/header.php'
 <div class="py-5">
     <div class="container">
         <div class="row justify-content-center">
-            <div class="col-md-6">
+            <div class=" col-sm-10 col-md-6">
                 <!-- Bootstrap Alert -->
             <?php
                  if (isset($_SESSION['success'])) :?>
