@@ -69,7 +69,7 @@ elseif (isset($_POST['login-btn'])) {
     $loggedUser = $stmt->fetch(PDO::FETCH_ASSOC);
     if ($loggedUser) {
         $username = $loggedUser['fname'];
-        $userid = $loggedUser['user_id'];
+        $userid =  $loggedUser['user_id'];
         $_SESSION['auth_user'] = [
             'name'=>$username,
             'id'=>$userid

@@ -1,7 +1,7 @@
 <?php
 require __DIR__ . '/config/database.php';
-
 require __DIR__ . '/flash.php';
+require_once __DIR__ . '/includes/navbar.php'; //to use the existing session
 
 // you can't access this page if you are not logged in
 if (!isset($_SESSION['auth_user'])) {
@@ -9,45 +9,46 @@ if (!isset($_SESSION['auth_user'])) {
     exit;
 }
 
-if (isset($_POST['add_to_cart'])) {
-    // insert the product_id, users_id and quantity into the carts table
-    $productid = $_GET['pid'];
-    $userid = $_POST['userid'];
-    $quantity = $_POST['quantity'];
-
-    // before inserting into cart, check if the product exists
-    $query = $dbh->prepare("SELECT * FROM cart WHERE product_id='$productid' and user_id='$userid'");
-    $query->execute();
-    $existingRecord = $query->fetch(PDO::FETCH_ASSOC);
-    if ($existingRecord) {
-        // show a flash message to show product is already in the cart
-        flash('InTheCart', 'Product is already in the cart', FLASH_WARNING);
-        flash('InTheCart');
-    }
-
-    else {
-    // if product doesn't exist in the cart, add to cart
-        $statement = $dbh->prepare("INSERT INTO cart (user_id, product_id, quantity)
-        VALUES(:user_id, :product_id, :quantity)");
-        $statement->bindValue(':user_id', $userid, PDO::PARAM_STR);
-        $statement->bindValue(':product_id', $productid, PDO::PARAM_STR);
-        $statement->bindValue(':quantity', $quantity, PDO::PARAM_STR);
-        $statement->execute();
-        $lastInsertId=$dbh->lastInsertId();
-        if ($lastInsertId) {
-            flash('recordInserted', 'Record inserted successfully', FLASH_SUCCESS);
-            flash('recordInserted');
-        } else {
-            flash('recordNotInserted', 'Record not inserted', FLASH_ERROR);
-            flash('recordNotInserted');
+else {
+    if (isset($_POST['add_to_cart'])) {
+        // insert the product_id, users_id and quantity into the carts table
+        $productid = $_GET['pid'];
+        $userid = $_POST['userid'];
+        $quantity = $_POST['quantity'];
+    
+        // before inserting into cart, check if the product exists
+        $query = $dbh->prepare("SELECT * FROM cart WHERE product_id='$productid' and user_id='$userid'");
+        $query->execute();
+        $existingRecord = $query->fetch(PDO::FETCH_ASSOC);
+        if ($existingRecord) {
+            // show a flash message to show product is already in the cart
+            flash('InTheCart', 'Product is already in the cart', FLASH_WARNING);
+            flash('InTheCart');
         }
+    
+        else {
+        // if product doesn't exist in the cart, add to cart
+            $statement = $dbh->prepare("INSERT INTO cart (user_id, product_id, quantity)
+            VALUES(:user_id, :product_id, :quantity)");
+            $statement->bindValue(':user_id', $userid, PDO::PARAM_STR);
+            $statement->bindValue(':product_id', $productid, PDO::PARAM_STR);
+            $statement->bindValue(':quantity', $quantity, PDO::PARAM_STR);
+            $statement->execute();
+            $lastInsertId=$dbh->lastInsertId();
+            if ($lastInsertId) {
+                flash('recordInserted', 'Record inserted successfully', FLASH_SUCCESS);
+                flash('recordInserted');
+            } else {
+                flash('recordNotInserted', 'Record not inserted', FLASH_ERROR);
+                flash('recordNotInserted');
+            }
+        }
+    
     }
-
 }
 ?>
 
 <?php require_once __DIR__ . '/includes/header.php';?>
-<?php require_once __DIR__ . '/includes/navbar.php';?>
 <div class="py-5">
     <div class="container"> 
         <div class="row">
@@ -86,9 +87,8 @@ if (isset($_POST['add_to_cart'])) {
                 products p WHERE c.product_id=p.product_id AND c.user_id ='$user_id'");
                 $statement->execute();
                 while($row = $statement->fetch(PDO::FETCH_ASSOC)):
-                if ($row) :
+                    if ($row) :
                     $total = 0;
-                    $grand_total = 0;
                     ?>
 
                     <div class="card shadow mb-3">
@@ -119,9 +119,8 @@ if (isset($_POST['add_to_cart'])) {
                             <div class="col-md-2">
                                 <h5>
                                     <?php 
-                                        $total = $row['price'] * $row['quantity'];
+                                        $total = $total + $row['price'] * $row['quantity'];
                                         echo $total;
-                                        $grand_total += $total;
                                     ?>
                                 </h5>
                             </div> 
@@ -138,10 +137,15 @@ if (isset($_POST['add_to_cart'])) {
                             ?>
                         </div>
                     </div>
+
+                    <?php
+                        $grand_total = 0;
+                        $grand_total += $total;
+                    ?>
                 
-                <?php else : 
-                    echo "There are no items in the cart";
-                ?> 
+                    <?php else : 
+                        echo "There are no items in the cart";
+                    ?> 
                 <?php endif ?>
                 <?php endwhile ?>
             </div>
@@ -151,9 +155,7 @@ if (isset($_POST['add_to_cart'])) {
                 <h5 class="float-end">
                     <b>Grand Total:</b>
                     <?php 
-                    if (isset($grand_total)) {
                         echo number_format($grand_total, 2);
-                    }
                     ?></h5>
                 </div>
                 <!-- total -->
