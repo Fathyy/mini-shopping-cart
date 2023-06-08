@@ -12,22 +12,22 @@ if (isset($_POST['signup-btn'])) {
 
     // if inputs is empty, display error
     if (!$fname || !$lname || !$email || !$phone || !$password || !$cpassword) {
-        $_SESSION['message'] = "This field cannot be empty";  
+        $_SESSION['error'] = "This field cannot be empty";  
     }
 
     // else validate the inputs
     else {
         // validate the email
         if (!filter_var($_POST['email'], FILTER_VALIDATE_EMAIL)) {
-            $_SESSION['message'] = "Invalid email format";
+            $_SESSION['error'] = "Invalid email format";
         }
 
         // check if the password contains 8 characters and has letters and numbers.
         if (!preg_match('/^(?=.*\d)(?=.*[A-Za-z])[0-9A-Za-z]{8,}$/',$_POST["password"])) {
-            $_SESSION['message'] =  "Password must contain numbers and letters and must be at least 8 characters long!";
+            $_SESSION['error'] =  "Password must contain numbers and letters and must be at least 8 characters long!";
         }
         if ($password !== $cpassword) {
-            $_SESSION['message'] = "Passwords should match";
+            $_SESSION['error'] = "Passwords should match";
         }
         
     }
@@ -46,7 +46,7 @@ if (isset($_POST['signup-btn'])) {
         // redirect to login page after successful registration
         $lastInsertId=$dbh->lastInsertId();
             if ($lastInsertId){
-                $_SESSION['success'] = "Successful registration. You may now log in";
+                $_SESSION['message'] = "Successful registration. You may now log in";
                 header('Location: login.php');
                 exit;
             }
@@ -68,15 +68,32 @@ elseif (isset($_POST['login-btn'])) {
     $stmt->execute();
     $loggedUser = $stmt->fetch(PDO::FETCH_ASSOC);
     if ($loggedUser) {
-        $username = $loggedUser['fname'];
-        $userid =  $loggedUser['user_id'];
-        $_SESSION['auth_user'] = [
-            'name'=>$username,
-            'id'=>$userid
-        ];
-        header("Location: index.php");
-        exit;
-    }
+        // compare if the password inputted matches the hashed one in the DB
+        if (password_verify($email, $loggedUser['password'])) {
+            $username = $loggedUser['fname'];
+            $userid =  $loggedUser['user_id'];
+            $role_as = $loggedUser['role_as'];
+            $_SESSION['auth_user'] = [
+                'name'=>$username,
+                'id'=>$userid
+            ];
+            $_SESSION['role_as'] =$role_as;
 
+            // if the user is an admin, take him/her to the admin index page
+            if ($role_as == 1) {
+                header("Location: admin/index.php");
+                exit;
+            }
+            // else to the user dashboard
+            else {
+                header("Location: index.php");
+                exit;
+            }
+            }   
+    }
+    // if user doesn't exist
+    else {
+        $_SESSION['message'] = "Invalid Credentials";
+    }
 }
 ?> 

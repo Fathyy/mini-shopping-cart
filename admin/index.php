@@ -1,5 +1,7 @@
 <?php
-include ('includes/header.php');?>
+require __DIR__ . '/includes/header.php';
+require __DIR__ . '/middleware/middleware.php';
+?>
 
 <div class="container">
     <!-- <div class="row">
@@ -82,5 +84,5 @@ include ('includes/header.php');?>
         <!-- </div>
     </div> -->
 </div>
-<?php include ('includes/footer.php');?>
+<?php require __DIR__ . '/includes/footer.php';?>
 
