@@ -9,12 +9,12 @@ require_once __DIR__ . '/includes/header.php'
             <div class=" col-sm-10 col-md-6">
                 <!-- Bootstrap Alert -->
             <?php
-                 if (isset($_SESSION['success'])) :?>
+                 if (isset($_SESSION['message'])) :?>
                      <div class="alert alert-warning alert-dismissible fade show" role="alert">
-                     <?php echo $_SESSION['success']?>
+                     <?php echo $_SESSION['message']?>
                     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                     </div>
-                    <?php unset($_SESSION['success'])?>
+                    <?php unset($_SESSION['message'])?>
                  <?php endif ?>
                 
                 <!-- Bootstrap Alert -->

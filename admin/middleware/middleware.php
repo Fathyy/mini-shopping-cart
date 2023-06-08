@@ -1,6 +1,6 @@
 <?php
 // check if someone is logged in 
-if (isset($_SESSION['auth'])) {
+if (isset($_SESSION['auth_user'])) {
     if ($_SESSION['role_as'] != 1) {
 
         $_SESSION['message'] = "You are not authorised to access this page ";

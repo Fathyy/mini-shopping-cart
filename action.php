@@ -69,7 +69,7 @@ elseif (isset($_POST['login-btn'])) {
     $loggedUser = $stmt->fetch(PDO::FETCH_ASSOC);
     if ($loggedUser) {
         // compare if the password inputted matches the hashed one in the DB
-        if (password_verify($email, $loggedUser['password'])) {
+        if (password_verify($password, $loggedUser['password'])) {
             $username = $loggedUser['fname'];
             $userid =  $loggedUser['user_id'];
             $role_as = $loggedUser['role_as'];
@@ -94,6 +94,8 @@ elseif (isset($_POST['login-btn'])) {
     // if user doesn't exist
     else {
         $_SESSION['message'] = "Invalid Credentials";
+        header("Location: login.php");
+        exit;
     }
 }
 ?> 
