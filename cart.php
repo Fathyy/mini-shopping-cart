@@ -87,8 +87,9 @@ else {
                 products p WHERE c.product_id=p.product_id AND c.user_id ='$user_id'");
                 $statement->execute();
                 while($row = $statement->fetch(PDO::FETCH_ASSOC)):
-                    if ($row) :
-                    $total = 0;
+                    // if ($row):
+                        $total = 0;
+                        $grand_total = 0;
                     ?>
 
                     <div class="card shadow mb-3">
@@ -121,6 +122,7 @@ else {
                                     <?php 
                                         $total = $total + $row['price'] * $row['quantity'];
                                         echo $total;
+                                        $grand_total = $grand_total + $total;
                                     ?>
                                 </h5>
                             </div> 
@@ -137,16 +139,6 @@ else {
                             ?>
                         </div>
                     </div>
-
-                    <?php
-                        $grand_total = 0;
-                        $grand_total += $total;
-                    ?>
-                
-                    <?php else : 
-                        echo "There are no items in the cart";
-                    ?> 
-                <?php endif ?>
                 <?php endwhile ?>
             </div>
 
@@ -154,8 +146,11 @@ else {
             <div>
                 <h5 class="float-end">
                     <b>Grand Total:</b>
-                    <?php 
+                    <?php
+                    if (isset($grand_total)) {
                         echo number_format($grand_total, 2);
+                    } 
+                        
                     ?></h5>
                 </div>
                 <!-- total -->
