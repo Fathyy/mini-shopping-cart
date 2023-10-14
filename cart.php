@@ -86,11 +86,11 @@ else {
                 $statement = $dbh->prepare("SELECT p.name, p.image, p.price, c.id, c.quantity FROM cart c, 
                 products p WHERE c.product_id=p.product_id AND c.user_id ='$user_id'");
                 $statement->execute();
-                while($row = $statement->fetch(PDO::FETCH_ASSOC)):
-                    // if ($row):
-                        $total = 0;
-                        $grand_total = 0;
-                    ?>
+
+                $total = 0;
+                $grand_total = 0;
+
+                while($row = $statement->fetch(PDO::FETCH_ASSOC)):?>
 
                     <div class="card shadow mb-3">
                         <div class="row align-items-center">
@@ -120,13 +120,12 @@ else {
                             <div class="col-md-2">
                                 <h5>
                                     <?php 
-                                        $total = $total + $row['price'] * $row['quantity'];
+                                        $total = $total + ($row['price'] * $row['quantity']);
                                         echo $total;
-                                        $grand_total = $grand_total + $total;
+                                        
                                     ?>
                                 </h5>
-                            </div> 
-                            
+                            </div>                             
                             <!-- process the remove button -->
                             <?php 
                             if (isset($_GET['action'])) {
@@ -142,19 +141,18 @@ else {
                 <?php endwhile ?>
             </div>
 
-            <!-- total -->
+            <!-- Grand total -->
             <div>
                 <h5 class="float-end">
                     <b>Grand Total:</b>
                     <?php
-                    if (isset($grand_total)) {
-                        echo number_format($grand_total, 2);
-                    } 
-                        
+                    $grand_total = $grand_total + $total;
+                    echo number_format($grand_total, 2); 
                     ?></h5>
-                </div>
-                <!-- total -->
-                
+            </div>
+            <!-- Grand total -->
+            
+            
                 <!-- checkout button -->
                 <div>
                     <button class="btn btn-success float-end btn-large checkout-btn">

@@ -14,8 +14,7 @@ if (isset($_GET['grand_total'])) {
                     'name' => 'Product purchase',
                     'price'=>$_GET['grand_total'],
                     'description'=>'Get free products today',
-                    'quantity'=>1
-                    
+                    'quantity'=>1     
                 )
              )
         ))->send();

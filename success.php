@@ -1,4 +1,5 @@
 <?php
+session_start();
 require_once __DIR__ . '/config2.php';
 
 // connect to the database
@@ -31,9 +32,11 @@ if (array_key_exists('paymentId', $_GET) && array_key_exists('PayerID', $_GET)) 
 
         $lastInsertId=$dbh->lastInsertId();
             if ($lastInsertId){
-                echo "Payment is successful, Your transaction ID is " . $payment_id;
+                // echo "Payment is successful, Your transaction ID is " . $payment_id;
+                $_SESSION['lastInsertedId'] = $lastInsertId;
+                header("Location: receipt.php");
+                exit;
             }
-
     }
     else {
         echo $response->getMessage();
