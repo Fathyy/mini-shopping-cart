@@ -34,6 +34,8 @@ if (array_key_exists('paymentId', $_GET) && array_key_exists('PayerID', $_GET)) 
             if ($lastInsertId){
                 // echo "Payment is successful, Your transaction ID is " . $payment_id;
                 $_SESSION['lastInsertedId'] = $lastInsertId;
+            
+                // redirect to the receipt page to show the payment details
                 header("Location: receipt.php");
                 exit;
             }

@@ -34,7 +34,9 @@ function create_flash_message(string $name, string $message, string $type): void
  */
 function format_flash_message(array $flash_message): string
 {
-    return sprintf('<div class="alert alert-%s alert-dismissible fade show"">%s</div>',
+    return sprintf('<div class="alert alert-%s alert-dismissible fade show">%s
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>',
         $flash_message['type'],
         $flash_message['message']
     );
@@ -107,5 +109,4 @@ function flash(string $name = '', string $message = '', string $type = ''): void
     }
 }
 ?>
-
 <?php require_once __DIR__ . '/includes/footer.php'; ?>
